@@ -32,6 +32,9 @@
 #include <lauxlib.h>
 
 
+#include "ngx_meta_lua_api.h"
+
+
 #include "ngx_stream_lua_request.h"
 
 
@@ -158,8 +161,6 @@ typedef struct ngx_stream_lua_balancer_peer_data_s
 typedef struct ngx_stream_lua_sema_mm_s  ngx_stream_lua_sema_mm_t;
 
 
-typedef ngx_int_t (*ngx_stream_lua_main_conf_handler_pt)(ngx_log_t *log,
-    ngx_stream_lua_main_conf_t *lmcf, lua_State *L);
 typedef ngx_int_t (*ngx_stream_lua_srv_conf_handler_pt)(
     ngx_stream_lua_request_t *r, ngx_stream_lua_srv_conf_t *lscf, lua_State *L);
 
@@ -199,18 +200,14 @@ struct ngx_stream_lua_main_conf_s {
 
 #endif
 
-    ngx_array_t         *shm_zones;  /* of ngx_shm_zone_t* */
-
-    ngx_array_t         *shdict_zones; /* shm zones of "shdict" */
-
     ngx_array_t         *preload_hooks; /* of ngx_stream_lua_preload_hook_t */
 
     ngx_flag_t           postponed_to_preread_phase_end;
 
-    ngx_stream_lua_main_conf_handler_pt          init_handler;
+    ngx_meta_lua_main_conf_handler_pt            init_handler;
     ngx_str_t                                    init_src;
 
-    ngx_stream_lua_main_conf_handler_pt          init_worker_handler;
+    ngx_meta_lua_main_conf_handler_pt            init_worker_handler;
     ngx_str_t                                    init_worker_src;
 
     ngx_stream_lua_balancer_peer_data_t          *balancer_peer_data;
@@ -219,8 +216,6 @@ struct ngx_stream_lua_main_conf_s {
                      * concurrent requests and it is safe to store the peer
                      * data pointer in the main conf.
                      */
-
-    ngx_uint_t                      shm_zones_inited;
 
     ngx_stream_lua_sema_mm_t               *sema_mm;
 
@@ -234,7 +229,6 @@ struct ngx_stream_lua_main_conf_s {
     unsigned             requires_preread:1;
 
     unsigned             requires_log:1;
-    unsigned             requires_shm:1;
     unsigned             requires_capture_log:1;
 };
 

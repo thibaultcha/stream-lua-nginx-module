@@ -30,6 +30,7 @@ ngx-build $force $version \
             --with-stream \
             --with-stream_ssl_preread_module \
             --with-ipv6 \
+            --add-module=$root/../meta-lua-nginx-module/src/meta \
             --add-module=$root/../lua-nginx-module \
             --add-module=$root/../echo-nginx-module \
             --add-module=$root/../memc-nginx-module \

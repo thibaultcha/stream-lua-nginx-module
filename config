@@ -261,7 +261,6 @@ STREAM_LUA_SRCS=" \
                 $ngx_addon_dir/src/ngx_stream_lua_ctx.c \
                 $ngx_addon_dir/src/ngx_stream_lua_regex.c \
                 $ngx_addon_dir/src/ngx_stream_lua_script.c \
-                $ngx_addon_dir/src/ngx_stream_lua_shdict.c \
                 $ngx_addon_dir/src/ngx_stream_lua_variable.c \
                 $ngx_addon_dir/src/ngx_stream_lua_timer.c \
                 $ngx_addon_dir/src/ngx_stream_lua_config.c \
@@ -283,7 +282,6 @@ STREAM_LUA_SRCS=" \
                 "
 
 STREAM_LUA_DEPS=" \
-                $ngx_addon_dir/src/ddebug.h \
                 $ngx_addon_dir/src/ngx_stream_lua_autoconf.h \
                 $ngx_addon_dir/src/api/ngx_stream_lua_api.h \
                 $ngx_addon_dir/src/ngx_stream_lua_request.h \
@@ -305,7 +303,6 @@ STREAM_LUA_DEPS=" \
                 $ngx_addon_dir/src/ngx_stream_lua_phase.h \
                 $ngx_addon_dir/src/ngx_stream_lua_ctx.h \
                 $ngx_addon_dir/src/ngx_stream_lua_script.h \
-                $ngx_addon_dir/src/ngx_stream_lua_shdict.h \
                 $ngx_addon_dir/src/ngx_stream_lua_timer.h \
                 $ngx_addon_dir/src/ngx_stream_lua_config.h \
                 $ngx_addon_dir/src/api/ngx_stream_lua_api.h \

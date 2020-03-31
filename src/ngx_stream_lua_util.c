@@ -20,6 +20,7 @@
 
 
 #include "nginx.h"
+#include "ngx_meta_lua_api.h"
 #include "ngx_stream_lua_directive.h"
 #include "ngx_stream_lua_util.h"
 #include "ngx_stream_lua_exception.h"
@@ -31,7 +32,6 @@
 #include "ngx_stream_lua_string.h"
 #include "ngx_stream_lua_misc.h"
 #include "ngx_stream_lua_consts.h"
-#include "ngx_stream_lua_shdict.h"
 #include "ngx_stream_lua_coroutine.h"
 #include "ngx_stream_lua_socket_tcp.h"
 #include "ngx_stream_lua_socket_udp.h"
@@ -102,7 +102,7 @@ static ngx_int_t ngx_stream_lua_handle_exit(lua_State *L,
 static int ngx_stream_lua_thread_traceback(lua_State *L, lua_State *co,
     ngx_stream_lua_co_ctx_t *coctx);
 static void ngx_stream_lua_inject_ngx_api(lua_State *L,
-    ngx_stream_lua_main_conf_t *lmcf, ngx_log_t *log);
+    ngx_cycle_t *cycle, ngx_stream_lua_main_conf_t *lmcf, ngx_log_t *log);
 static ngx_int_t ngx_stream_lua_output_filter(ngx_stream_lua_request_t *r,
     ngx_chain_t *in);
 static void ngx_stream_lua_finalize_threads(ngx_stream_lua_request_t *r,
@@ -501,13 +501,13 @@ ngx_stream_lua_init_globals(lua_State *L, ngx_cycle_t *cycle,
                    "lua initializing lua globals");
 
 
-    ngx_stream_lua_inject_ngx_api(L, lmcf, log);
+    ngx_stream_lua_inject_ngx_api(L, cycle, lmcf, log);
 }
 
 
 static void
-ngx_stream_lua_inject_ngx_api(lua_State *L, ngx_stream_lua_main_conf_t *lmcf,
-    ngx_log_t *log)
+ngx_stream_lua_inject_ngx_api(lua_State *L, ngx_cycle_t *cycle,
+    ngx_stream_lua_main_conf_t *lmcf, ngx_log_t *log)
 {
     lua_createtable(L, 0 /* narr */, 113 /* nrec */);    /* ngx.* */
 
@@ -529,7 +529,7 @@ ngx_stream_lua_inject_ngx_api(lua_State *L, ngx_stream_lua_main_conf_t *lmcf,
     ngx_stream_lua_inject_req_api(log, L);
 
 
-    ngx_stream_lua_inject_shdict_api(lmcf, L);
+    ngx_meta_lua_inject_shdict_api(L, cycle, &ngx_stream_lua_module);
     ngx_stream_lua_inject_socket_tcp_api(log, L);
     ngx_stream_lua_inject_socket_udp_api(log, L);
     ngx_stream_lua_inject_uthread_api(log, L);
